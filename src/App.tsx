@@ -4,6 +4,7 @@ import Editor from '@monaco-editor/react'
 import { BiLogoHtml5 } from 'react-icons/bi'
 import { BiSolidFileCss } from 'react-icons/bi'
 import { BiLogoJavascript } from 'react-icons/bi'
+import MyEditor from './components/MyEditor'
 
 function App() {
   const [html, setHtml] = useState(`<h1 class="yo">Hello world</h1>
@@ -38,48 +39,25 @@ yo.addEventListener('click', ()=>{
 
       <main>
         <section className='grid grid-cols-3 bg-black/80 px-4 overflow-hidden'>
-          <div>
-            <span className='flex items-center gap-2 text-white'>
-              <BiLogoHtml5 className='text-red-200' /> HTML
-            </span>
-            <Editor
-              language='html'
-              value={html}
-              height='50vh'
-              options={{
-                minimap: {
-                  enabled: false,
-                },
-              }}
-              theme='vs-dark'
-              onChange={e => setHtml(e || '')}
-            />
-          </div>
-          <div>
-            <span className='flex items-center gap-2 text-white'>
-              <BiSolidFileCss className='text-blue-200' />
-              CSS
-            </span>
-            <Editor
-              theme='vs-dark'
-              value={css}
-              language='css'
-              height='50vh'
-              onChange={e => setCss(e || '')}
-            />
-          </div>
-          <div>
-            <span className='flex items-center gap-2 text-white'>
-              <BiLogoJavascript className='text-yellow-200' /> Javasrcipt
-            </span>
-            <Editor
-              theme='vs-dark'
-              language='javascript'
-              onChange={e => setJavascript(e || '')}
-              height='50vh'
-              value={javasrcipt}
-            />
-          </div>
+          <MyEditor
+            value={html}
+            type='html'
+            preview='Html'
+            onChange={setHtml}
+          />
+          <MyEditor
+            value={css}
+            type='css'
+            preview='Css'
+            onChange={setCss}
+          />
+
+          <MyEditor
+            value={javasrcipt}
+            type='javascript'
+            preview='Javascript'
+            onChange={setJavascript}
+          />
         </section>
 
         <iframe

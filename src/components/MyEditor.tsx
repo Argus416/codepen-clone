@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, ChangeEvent } from 'react'
 import Editor from '@monaco-editor/react'
 import { BiLogoHtml5 } from 'react-icons/bi'
 import { BiSolidFileCss } from 'react-icons/bi'
@@ -8,13 +8,30 @@ interface IMyEditor {
   type: 'html' | 'css' | 'javascript'
   preview: 'Html' | 'Css' | 'Javascript'
   value: string
-  onChange: () => {}
+  onChange: (value: string, event: ChangeEvent<{}>) => void
 }
+
 function MyEditor({ value, type, preview, onChange }: IMyEditor) {
+  const [icon, setIcon] = useState<Element | null>(null)
+
+  useEffect(() => {
+    if (type === 'html') {
+      setIcon(<BiLogoHtml5 className='text-red-200' />)
+    }
+
+    if (type === 'css') {
+      setIcon(<BiSolidFileCss className='text-blue-200' />)
+    }
+
+    if (type === 'javascript') {
+      setIcon(<BiLogoJavascript className='text-yellow-200' />)
+    }
+  }, [type])
+
   return (
-    <React.Fragment>
+    <div>
       <span className='flex items-center gap-2 text-white'>
-        <BiLogoHtml5 className='text-red-200' /> {preview}
+        {icon !== null && icon} {preview}
       </span>
       <Editor
         language={type}
@@ -28,7 +45,7 @@ function MyEditor({ value, type, preview, onChange }: IMyEditor) {
         theme='vs-dark'
         onChange={onChange}
       />
-    </React.Fragment>
+    </div>
   )
 }
 
