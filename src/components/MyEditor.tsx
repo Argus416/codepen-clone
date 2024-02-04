@@ -1,14 +1,14 @@
-import React, { useEffect, useState, ChangeEvent } from 'react'
+import { useEffect, useState } from 'react'
 import Editor from '@monaco-editor/react'
 import { BiLogoHtml5 } from 'react-icons/bi'
 import { BiSolidFileCss } from 'react-icons/bi'
 import { BiLogoJavascript } from 'react-icons/bi'
-
+import { LOCAL_STORAGE_KEYS } from '../config/constants'
 interface IMyEditor {
   type: 'html' | 'css' | 'javascript'
   preview: 'Html' | 'Css' | 'Javascript'
   value: string
-  onChange: (value: string, event: ChangeEvent<{}>) => void
+  onChange: (value: string) => string
 }
 
 function MyEditor({ value, type, preview, onChange }: IMyEditor) {
@@ -28,6 +28,10 @@ function MyEditor({ value, type, preview, onChange }: IMyEditor) {
     }
   }, [type])
 
+  const onChangeHandler = (value: string) => {
+    localStorage.setItem(LOCAL_STORAGE_KEYS[type], value)
+    return onChange(value)
+  }
   return (
     <div>
       <span className='flex items-center gap-2 text-white'>
@@ -43,7 +47,7 @@ function MyEditor({ value, type, preview, onChange }: IMyEditor) {
           },
         }}
         theme='vs-dark'
-        onChange={onChange}
+        onChange={onChangeHandler}
       />
     </div>
   )

@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Navbar from './components//Navbar'
-import Editor from '@monaco-editor/react'
-import { BiLogoHtml5 } from 'react-icons/bi'
-import { BiSolidFileCss } from 'react-icons/bi'
-import { BiLogoJavascript } from 'react-icons/bi'
 import MyEditor from './components/MyEditor'
-
+import { LOCAL_STORAGE_KEYS } from './config/constants'
+import _ from 'lodash'
 function App() {
   const [html, setHtml] = useState(`<h1 class="yo">Hello world</h1>
 `)
@@ -23,14 +20,32 @@ yo.addEventListener('click', ()=>{
 
   const [result, setResult] = useState('')
 
-  useEffect(() => {
+  const updateResult = useCallback(() => {
     setResult(`
-<head>
-<style>${css}</style>
-</head>
-  <body>${html}</body>
-  <script>${javasrcipt}</script>
-`)
+      <head>
+        <style>${css}</style>
+      </head>
+      <body>${html}</body>
+      <script>${javasrcipt}</script>
+    `)
+  }, [html, css, javasrcipt])
+
+  useEffect(() => {
+    Object.values(LOCAL_STORAGE_KEYS).forEach(value => {
+      if (
+        !_.isNull(localStorage.getItem(value)) ||
+        !_.isEmpty(localStorage.getItem(value))
+      ) {
+        if (value === 'html') setHtml(localStorage.getItem(value) ?? '')
+        if (value === 'css') setCss(localStorage.getItem(value) ?? '')
+        if (value === 'javascript')
+          setJavascript(localStorage.getItem(value) ?? '')
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    updateResult()
   }, [html, css, javasrcipt])
 
   return (
