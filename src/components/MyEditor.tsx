@@ -4,15 +4,18 @@ import { BiLogoHtml5 } from 'react-icons/bi'
 import { BiSolidFileCss } from 'react-icons/bi'
 import { BiLogoJavascript } from 'react-icons/bi'
 import { LOCAL_STORAGE_KEYS } from '../config/constants'
+import { ReactNode } from 'react';
+
 interface IMyEditor {
   type: 'html' | 'css' | 'javascript'
   preview: 'Html' | 'Css' | 'Javascript'
   value: string
-  onChange: (value: string) => string
+  onChange: (value: string) => void
 }
 
 function MyEditor({ value, type, preview, onChange }: IMyEditor) {
-  const [icon, setIcon] = useState<Element | null>(null)
+  
+  const [icon, setIcon] = useState<ReactNode | null>(null);
 
   useEffect(() => {
     if (type === 'html') {
@@ -28,7 +31,7 @@ function MyEditor({ value, type, preview, onChange }: IMyEditor) {
     }
   }, [type])
 
-  const onChangeHandler = (value: string) => {
+  const onChangeHandler = (value: string = "") => {
     localStorage.setItem(LOCAL_STORAGE_KEYS[type], value)
     return onChange(value)
   }
