@@ -2,27 +2,37 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Navbar from './components//Navbar'
 import MyEditor from './components/MyEditor'
 import { LOCAL_STORAGE_KEYS } from './config/constants'
+import htmlTemplate from "./template/html.txt"
+import cssTemplate from "./template/css.txt"
+
 import _ from 'lodash'
 function App() {
-  const [html, setHtml] = useState(`<h1 class="yo">Hello world</h1>
-`)
-  const [css, setCss] = useState(`h1{
-    background-color: red;
-}
-`)
-  const [javasrcipt, setJavascript] =
-    useState(`const yo = document.querySelector('.yo')
+  const [html, setHtml] = useState("")
+  const [css, setCss] = useState("")
 
-yo.addEventListener('click', ()=>{
-    console.log('yo')
-})
-`)
+  const [javasrcipt, setJavascript] =
+    useState("")
+
+  useEffect(() =>{
+
+
+    fetch(htmlTemplate)
+    .then(res => res.text())
+    .then(data => setHtml(data))
+
+
+    fetch(cssTemplate)
+    .then(res => res.text())
+    .then(data => setCss(data))
+
+  }, [])
 
   const [result, setResult] = useState('')
 
   const updateResult = useCallback(() => {
     setResult(`
       <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
         <style>${css}</style>
       </head>
       <body>${html}</body>
@@ -77,7 +87,7 @@ yo.addEventListener('click', ()=>{
 
         <iframe
           srcDoc={result}
-          className='w-screen h-[45vh] bg-red-200 '
+          className='w-screen h-[45vh]'
         />
       </main>
     </React.Fragment>
